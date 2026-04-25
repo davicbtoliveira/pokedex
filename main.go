@@ -1,31 +1,15 @@
 package main
 
 import (
-	"bufio"
-	"fmt"
-	"os"
+	"pokedex/internal/pokeapi"
+	"time"
 )
 
 func main() {
-	scanner := bufio.NewScanner(os.Stdin)
-
-	for {
-		fmt.Print("Pokedex > ")
-
-		scanner.Scan()
-		rawInput := scanner.Text()
-		clearedInput := cleanInput(rawInput)
-
-		commands = getCommands()
-		command, ok := commands[clearedInput[0]]
-		if !ok {
-			fmt.Println("Unknown command")
-			continue
-		}
-
-		err := command.callback()
-		if err != nil {
-			fmt.Println(err)
-		}
+	pokeClient := pokeapi.NewClient(5 * time.Second)
+	c := &config{
+		pokeapiClient: pokeClient,
 	}
+
+	startRepl(c)
 }
