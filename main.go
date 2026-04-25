@@ -14,8 +14,18 @@ func main() {
 
 		scanner.Scan()
 		rawInput := scanner.Text()
-		input := cleanInput(rawInput)
+		clearedInput := cleanInput(rawInput)
 
-		fmt.Printf("Your command was: %v\n", input[0])
+		commands = getCommands()
+		command, ok := commands[clearedInput[0]]
+		if !ok {
+			fmt.Println("Unknown command")
+			continue
+		}
+
+		err := command.callback()
+		if err != nil {
+			fmt.Println(err)
+		}
 	}
 }
