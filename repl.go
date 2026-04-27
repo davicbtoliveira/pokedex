@@ -17,7 +17,6 @@ type config struct {
 func startRepl(c *config) {
 	reader := bufio.NewScanner(os.Stdin)
 
-	cfg := &config{}
 	for {
 		fmt.Print("Pokedex > ")
 		reader.Scan()
@@ -29,9 +28,14 @@ func startRepl(c *config) {
 
 		commandName := words[0]
 
+		var param *string
+		if len(words) > 1 {
+			param = &words[1]
+		}
+
 		command, exists := getCommands()[commandName]
 		if exists {
-			err := command.callback(cfg)
+			err := command.callback(c, param)
 			if err != nil {
 				fmt.Println(err)
 			}
@@ -52,7 +56,7 @@ func cleanInput(text string) []string {
 type cliCommand struct {
 	name        string
 	description string
-	callback    func(*config) error
+	callback    func(*config, *string) error
 }
 
 func getCommands() map[string]cliCommand {
@@ -76,6 +80,11 @@ func getCommands() map[string]cliCommand {
 			name:        "mapb",
 			description: "Get the Previous page of locatons",
 			callback:    commandMapb,
+		},
+		"explore": {
+			name:        "explore",
+			description: "List all pokemons in a given area",
+			callback:    commandExplore,
 		},
 	}
 }

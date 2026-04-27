@@ -5,13 +5,13 @@ import (
 	"time"
 )
 
-func NewCache(interval time.Duration) *Cache {
-	cache := Cache{
+func NewCache(interval time.Duration) Cache {
+	c := Cache{
 		Entry: make(map[string]cacheEntry),
-		mu:    sync.Mutex{},
+		mu:    &sync.Mutex{},
 	}
 
-	go cache.reapLoop(interval)
+	go c.reapLoop(interval)
 
-	return &cache
+	return c
 }

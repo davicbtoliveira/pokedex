@@ -5,9 +5,5 @@ func (c *Cache) Get(key string) ([]byte, bool) {
 	defer c.mu.Unlock()
 
 	value, ok := c.Entry[key]
-	if !ok {
-		return nil, false
-	}
-
-	return value.val, true
+	return value.val, ok
 }

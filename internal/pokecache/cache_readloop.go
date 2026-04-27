@@ -4,12 +4,18 @@ import "time"
 
 func (c *Cache) reapLoop(interval time.Duration) {
 	ticker := time.NewTicker(interval)
-
 	for range ticker.C {
-		for k, v := range c.Entry {
-			if time.Since(v.createdAt) > interval {
-				delete(c.Entry, k)
-			}
+		c.reap(time.Now().UTC(), interval)
+	}
+}
+
+func (c *Cache) reap(now time.Time, last time.Duration) {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+
+	for k, v := range c.Entry {
+		if v.createdAt.Before(now.Add(-last)) {
+			delete(c.Entry, k)
 		}
 	}
 }
