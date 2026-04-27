@@ -8,8 +8,18 @@ import (
 	"strings"
 )
 
+type Pokemon struct {
+	Name           string
+	BaseExperience int
+	Height         int
+	IsDefault      bool
+	Order          int
+	Weight         int
+}
+
 type config struct {
 	pokeapiClient pokeapi.Client
+	pokedex       map[string]Pokemon
 	Next          *string
 	Previous      *string
 }
@@ -85,6 +95,16 @@ func getCommands() map[string]cliCommand {
 			name:        "explore",
 			description: "List all pokemons in a given area",
 			callback:    commandExplore,
+		},
+		"catch": {
+			name:        "catch",
+			description: "Catch a given pokemon",
+			callback:    commandCatch,
+		},
+		"inspect": {
+			name:        "inspect",
+			description: "Inspect a given Pokemon",
+			callback:    commandInspect,
 		},
 	}
 }
