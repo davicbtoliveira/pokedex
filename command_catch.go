@@ -28,8 +28,9 @@ func commandCatch(cfg *config, param *string) error {
 			Order:          pokeInfo.Order,
 			Weight:         pokeInfo.Weight,
 		}
-		cfg.pokedex["caughts"] = caught
+		cfg.pokedex["caughts"] = append(cfg.pokedex["caughts"], caught)
 		fmt.Printf("%v was caught!\n", caught.Name)
+		fmt.Printf("Now you can see %v in your pokedex, by using the pokedex command.\n", caught.Name)
 		return nil
 	}
 
